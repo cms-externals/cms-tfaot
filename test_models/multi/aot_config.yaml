@@ -22,5 +22,4 @@ compilation:
   batch_sizes: [1, 2, 4]
 
   # namespace the model is placed in, defaults to "tfaot_model", optional
-  # namespace: "tfaot_model"
-
+  namespace: null
