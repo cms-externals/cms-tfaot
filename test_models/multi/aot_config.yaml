@@ -1,21 +1,26 @@
 model:
   # name of the model, required
   name: test_multi
+
   # version of the model, required
   version: "1.0.0"
+
   # location of the saved_model directory, resolved relative to this file, defaults to "./saved_model", optional
   saved_model: ./saved_model
+
   # serving key, defaults to "serving_default", optional
   serving_key: serving_default
+
   # author information, optional
   author: Marcel Rieger
+
   # additional description, optional
   description: Multi input/output test model for AOT compilation studies.
 
 compilation:
   # list of batch sizes to compile, required
   batch_sizes: [1, 2, 4]
-  # namespace the model is placed in, defaults to "cms_tfaot", optional
-  namespace: "cms_tfaot"
-  # class name of the model, defaults to "<model.name>_bs{}" with "{}" being the respective batch size, optional
-  class_name: null
+
+  # namespace the model is placed in, defaults to "tfaot_model", optional
+  # namespace: "tfaot_model"
+

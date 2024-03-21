@@ -92,12 +92,7 @@ def load_and_normalize_config(config_file: str) -> dict[str, Any]:
         raise ValueError(f"misconfigured 'compilation.batch_sizes' entry in {config_file}")
 
     if not config["compilation"].get("namespace"):
-        config["compilation"]["namespace"] = "cms_tfaot"
-
-    if not config["compilation"].get("class_name"):
-        config["compilation"]["class_name"] = config["model"]["name"] + r"_bs{}"
-    elif r"{}" not in config["compilation"].get("class_name"):
-        raise ValueError(rf"misconfigured 'compilation.class_name' entry in {config_file} (missing {{}})")
+        config["compilation"]["namespace"] = "tfaot_model"
 
     return config
 
@@ -106,17 +101,13 @@ def compile_model(config: dict[str, Any], output_dir: str) -> tuple[list[str], l
     from cmsml.scripts.compile_tf_graph import compile_tf_graph
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        compile_class = config["compilation"]["class_name"]
-        if config["compilation"]["namespace"]:
-            compile_class = f"{config['compilation']['namespace']}::{compile_class}"
-
         compile_tf_graph(
             model_path=config["model"]["saved_model"],
             output_path=tmp_dir,
             batch_sizes=config["compilation"]["batch_sizes"],
             input_serving_key=config["model"]["serving_key"],
             compile_prefix=config["model"]["name"] + r"_bs{}",
-            compile_class=compile_class,
+            compile_class=f"{config['compilation']['namespace']}::{config['model']['name']}_bs{{}}",
         )
         aot_dir = os.path.join(tmp_dir, "aot")
 

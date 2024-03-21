@@ -18,7 +18,7 @@ dynamic = ["version", "readme", "dependencies"]
 
 [project.scripts]
 
-cms_tfaot_compile_model = "cms_tfaot.scripts.compile_model:main"
+cms_tfaot_compile = "cms_tfaot.scripts.tfaot_compile:main"
 
 
 [tool.setuptools.dynamic]
