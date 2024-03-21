@@ -32,7 +32,6 @@ CompilationResult = collections.namedtuple(
 def tfaot_compile(
     config_file: str,
     output_dir: str,
-    create_subdirs: bool = False,
     tool_name: str | None = None,
     tool_base: str | None = None,
     dev: bool = False,
@@ -57,10 +56,10 @@ def tfaot_compile(
     # compile
     header_files, object_files = compile_model(config, output_dir)
 
-    # create subdirectories and move files
+    # create subdirectories and move files in dev mode
     header_dir = output_dir
     object_dir = output_dir
-    if create_subdirs:
+    if dev:
         # header files
         header_dir = os.path.join(output_dir, "include", tool_name)
         if os.path.exists(header_dir):
@@ -180,7 +179,6 @@ def main() -> int:
     tfaot_compile(
         config_file=args.aot_config,
         output_dir=args.output_directory,
-        create_subdirs=args.dev,
         tool_name=args.tool_name,
         tool_base=args.tool_base,
         dev=args.dev,
