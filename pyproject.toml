@@ -1,0 +1,33 @@
+[build-system]
+
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+
+name = "cms_tfaot"
+description = "Tools for deploying TensorFlow AOT models in CMSSW production code."
+authors = [
+    {name = "Marcel Rieger", email = "marcel.rieger@cern.ch"},
+]
+license = {file = "LICENSE"}
+requires-python = ">=3.7"
+dynamic = ["version", "readme", "dependencies"]
+
+
+[project.scripts]
+
+cms_tfaot_compile_model = "cms_tfaot.scripts.compile_model:main"
+
+
+[tool.setuptools.dynamic]
+
+version = {attr = "cms_tfaot.__meta__.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+dependencies = {file = ["requirements.txt"]}
+
+
+[tool.setuptools.packages.find]
+
+include = ["cms_tfaot"]

@@ -1,0 +1,9 @@
+<tool name="{tool_name}" version="{tool_version}">
+  <client>
+    <environment name="{tool_base_name}" default="{tool_base}"/>
+    <environment name="LIBDIR" default="${tool_base_name}/{lib_dir}"/>
+    <environment name="INCLUDE" default="${tool_base_name}/{inc_dir}"/>
+  </client>
+  <use name="tensorflow-xla-runtime"/>
+  {ld_flags}
+</tool>

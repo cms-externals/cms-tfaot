@@ -1,0 +1,10 @@
+*.sublime-project
+*.sublime-workspace
+*.vscode
+*.DS_Store
+*.pyc
+__pycache__
+.ipynb_checkpoints
+tmp
+compiled_models
+out
