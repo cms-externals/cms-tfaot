@@ -137,9 +137,11 @@ def print_compilation_info(config: dict[str, Any], result: CompilationResult) ->
     print(f"\nsuccessfully AOT compiled model '{model_name}' for batch sizes: {batch_sizes_str}")
     print("\n  1. register it to scram:")
     print(f"     > scram setup {cmssw_rel_path(result.tool_file)}")
-    print("\n  2. include the following header in your code:")
+    print("\n  2. 'use' the tool in your BuildFile.xml:")
+    print(f"     <use name=\"{result.tool_name}.xml\"/>")
+    print("\n  3. include the following header in your code:")
     print(f"     #include \"{result.tool_name}/model.h\"")
-    print("\n  3. create an AOT model instance via:")
+    print("\n  4. create an AOT model instance via:")
     print(f"     auto model = tfaot::Model<{class_name}>();\n")
 
 
