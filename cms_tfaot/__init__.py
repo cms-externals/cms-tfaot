@@ -94,6 +94,14 @@ def load_and_normalize_config(config_file: str) -> dict[str, Any]:
     if not config["compilation"].get("namespace"):
         config["compilation"]["namespace"] = "tfaot_model"
 
+    tf_xla_flags = config["compilation"].get("tf_xla_flags")
+    if tf_xla_flags and not isinstance(tf_xla_flags, list):
+        raise TypeError(f"misconfigured 'compilation.tf_xla_flags' entry in {config_file}")
+
+    xla_flags = config["compilation"].get("xla_flags")
+    if xla_flags and not isinstance(xla_flags, list):
+        raise TypeError(f"misconfigured 'compilation.xla_flags' entry in {config_file}")
+
     return config
 
 
@@ -108,6 +116,8 @@ def compile_model(config: dict[str, Any], output_dir: str) -> tuple[list[str], l
             input_serving_key=config["model"]["serving_key"],
             compile_prefix=config["model"]["name"] + r"_bs{}",
             compile_class=f"{config['compilation']['namespace']}::{config['model']['name']}_bs{{}}",
+            xla_flags=config["compilation"].get("xla_flags"),
+            tf_xla_flags=config["compilation"].get("tf_xla_flags"),
         )
         aot_dir = os.path.join(tmp_dir, "aot")
 

@@ -23,3 +23,9 @@ compilation:
 
   # namespace the model is placed in, defaults to "tfaot_model", optional
   namespace: null
+
+  # list of TF_XLA_FLAGS (for the TF -> XLA conversion), optional
+  tf_xla_flags: []
+
+  # list of XLA_FLAGS (for the XLA optimization itself), optional
+  xla_flags: []
