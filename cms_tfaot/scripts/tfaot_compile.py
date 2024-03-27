@@ -35,6 +35,7 @@ def tfaot_compile(
     tool_name: str | None = None,
     tool_base: str | None = None,
     dev: bool = False,
+    additional_flags: list[str] | str | None = None,
 ) -> CompilationResult:
     # deferred imports
     from cms_tfaot import load_and_normalize_config, compile_model, create_wrapper, create_toolfile
@@ -54,7 +55,11 @@ def tfaot_compile(
         tool_base = cmssw_rel_path(output_dir) if dev else "@TOOL_BASE@"
 
     # compile
-    header_files, object_files = compile_model(config, output_dir)
+    header_files, object_files = compile_model(
+        config,
+        output_dir,
+        additional_flags=additional_flags,
+    )
 
     # create subdirectories and move files in dev mode
     header_dir = output_dir
@@ -176,6 +181,10 @@ def main() -> int:
         action="store_true",
         help="activates the development workflow, setting some variables to sensible defaults",
     )
+    parser.add_argument(
+        "--additional-flags",
+        help="additional flags to be passed to the underlying aot compiler invocation",
+    )
     args = parser.parse_args()
 
     tfaot_compile(
@@ -184,6 +193,7 @@ def main() -> int:
         tool_name=args.tool_name,
         tool_base=args.tool_base,
         dev=args.dev,
+        additional_flags=args.additional_flags,
     )
 
     return 0

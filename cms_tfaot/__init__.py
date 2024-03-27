@@ -105,7 +105,11 @@ def load_and_normalize_config(config_file: str) -> dict[str, Any]:
     return config
 
 
-def compile_model(config: dict[str, Any], output_dir: str) -> tuple[list[str], list[str]]:
+def compile_model(
+    config: dict[str, Any],
+    output_dir: str,
+    additional_flags: list[str] | str | None = None,
+) -> tuple[list[str], list[str]]:
     from cmsml.scripts.compile_tf_graph import compile_tf_graph
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -118,6 +122,7 @@ def compile_model(config: dict[str, Any], output_dir: str) -> tuple[list[str], l
             compile_class=f"{config['compilation']['namespace']}::{config['model']['name']}_bs{{}}",
             xla_flags=config["compilation"].get("xla_flags"),
             tf_xla_flags=config["compilation"].get("tf_xla_flags"),
+            additional_flags=additional_flags,
         )
         aot_dir = os.path.join(tmp_dir, "aot")
 

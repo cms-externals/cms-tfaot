@@ -13,7 +13,7 @@ authors = [
 ]
 license = {file = "LICENSE"}
 requires-python = ">=3.7"
-dynamic = ["version", "readme", "dependencies"]
+dynamic = ["version", "readme", "dependencies", "optional-dependencies"]
 
 
 [project.scripts]
@@ -26,6 +26,7 @@ cms_tfaot_compile = "cms_tfaot.scripts.tfaot_compile:main"
 version = {attr = "cms_tfaot.__meta__.__version__"}
 readme = {file = ["README.md"], content-type = "text/markdown"}
 dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {dev = {file = ["requirements_dev.txt"]}}
 
 
 [tool.setuptools.packages.find]

@@ -1,0 +1,22 @@
+name: Lint and test
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install dependencies ☕️
+        run: |
+          pip install -U pip setuptools
+          pip install .[dev]
+
+      - name: Lint 🔍
+        run: flake8 cms_tfaot
