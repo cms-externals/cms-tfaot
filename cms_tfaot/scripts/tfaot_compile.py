@@ -9,7 +9,9 @@ necessary for the production deployment.
 from __future__ import annotations
 
 import os
+import re
 import shutil
+import platform
 import collections
 from typing import Any
 
@@ -186,6 +188,23 @@ def main() -> int:
         help="additional flags to be passed to the underlying aot compiler invocation",
     )
     args = parser.parse_args()
+
+    # check if the platform arch matches the "--target_triple" value in additional_flags
+    if args.dev:
+        m = re.match(r"^.*--target_triple(\s+|=)([^-]+)-.+$", args.additional_flags or "")
+        triple_arch = m.group(2) if m else "x86_64"
+        arch = platform.processor()
+        if triple_arch != arch:
+            msg = f"\nWARNING: your platform architecture is '{arch}'"
+            if m:
+                msg += f" which does not match the configured '--target_triple' of '{triple_arch}'"
+            else:
+                msg += " but the default compilation target is 'x86_64'"
+            msg += (
+                ", which can lead to unexpected behavior in the compiled model, so please set the"
+                " correct target via --additional-flags=\"--target_triple=<arch>-unknown-linux\"\n"
+            )
+            print(msg)
 
     tfaot_compile(
         config_file=args.aot_config,
