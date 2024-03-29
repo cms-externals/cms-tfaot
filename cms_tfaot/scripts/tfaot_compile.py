@@ -145,7 +145,7 @@ def print_compilation_info(config: dict[str, Any], result: CompilationResult) ->
     print("\n  1. register it to scram:")
     print(f"     > scram setup {cmssw_rel_path(result.tool_file)}")
     print("\n  2. 'use' the tool in your BuildFile.xml:")
-    print(f"     <use name=\"{result.tool_name}.xml\"/>")
+    print(f"     <use name=\"{result.tool_name}\"/>")
     print("\n  3. include the following header in your code:")
     print(f"     #include \"{result.tool_name}/model.h\"")
     print("\n  4. create an AOT model instance via:")
