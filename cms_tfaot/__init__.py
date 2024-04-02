@@ -38,9 +38,11 @@ HeaderData = collections.namedtuple("HeaderData", [
     "n_args",
     "arg_counts",
     "arg_counts_no_batch",
+    "arg_types",
     "n_res",
     "res_counts",
     "res_counts_no_batch",
+    "res_types",
 ])
 
 # list of entries that are common to all header files, independent of batch sizes
@@ -165,7 +167,9 @@ def parse_header(path: str) -> HeaderData:
 
     # extract data
     arg_counts = {}
+    arg_types = {}
     res_counts = {}
+    res_types = {}
     while lines:
         line = lines.pop(0)
 
@@ -198,6 +202,17 @@ def parse_header(path: str) -> HeaderData:
             (arg_counts if kind == "arg" else res_counts)[index] = count
             continue
 
+        # read argument and result types
+        m = re.match(r"([^\s]+)\*\s(arg|result)(\d+)_data\(\)\s\{.*$", line)
+        if m:
+            # get kind and index
+            kind = m.group(2)
+            index = int(m.group(3))
+
+            # store the type
+            (arg_types if kind == "arg" else res_types)[index] = m.group(1)
+            continue
+
     # helper to flatten counts to lists
     def flatten(counts: dict[int, int], name: str) -> list[int]:
         if set(counts) != set(range(len(counts))):
@@ -227,6 +242,8 @@ def parse_header(path: str) -> HeaderData:
     data = set_("n_res", len(res_counts))
     data = set_("arg_counts", flatten(arg_counts, "argument"))
     data = set_("res_counts", flatten(res_counts, "result"))
+    data = set_("arg_types", flatten(arg_types, "argument"))
+    data = set_("res_types", flatten(res_types, "result"))
     data = set_("arg_counts_no_batch", tuple(
         no_batch(c, i, "argument")
         for i, c in enumerate(data.arg_counts)
