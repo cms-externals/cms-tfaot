@@ -86,13 +86,10 @@ def tfaot_compile(
 
     # create the header wrapper
     wrapper_file = create_wrapper(
-        output_file=os.path.join(header_dir, f"{config['model']['name']}.h"),
+        output_file=os.path.join(header_dir, "model.h"),
         header_files=[os.path.join(output_dir, h) for h in header_files],
         model_dir=config["model"]["saved_model"],
     )
-
-    # create a symlink to the model header
-    os.symlink(os.path.basename(wrapper_file), os.path.join(header_dir, "model.h"))
 
     # create the toolfile
     tool_file = create_toolfile(
