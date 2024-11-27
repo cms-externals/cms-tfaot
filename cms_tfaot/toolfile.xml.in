@@ -1,4 +1,4 @@
-<tool name="{tool_name}" version="{tool_version}">
+<tool name="{tool_name}" version="{tool_version}" revision="1">
   <client>
     <environment name="{tool_base_name}" default="{tool_base}"/>
     <environment name="LIBDIR" default="${tool_base_name}/{lib_dir}"/>
