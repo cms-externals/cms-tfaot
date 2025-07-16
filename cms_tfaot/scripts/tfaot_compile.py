@@ -190,7 +190,7 @@ def main() -> int:
     if args.dev:
         m = re.match(r"^.*--target_triple(\s+|=)([^-]+)-.+$", args.additional_flags or "")
         triple_arch = m.group(2) if m else "x86_64"
-        arch = platform.processor()
+        arch = platform.machine()
         if triple_arch != arch:
             msg = f"\nWARNING: your platform architecture is '{arch}'"
             if m:
