@@ -133,12 +133,14 @@ def compile_model(
             os.makedirs(output_dir)
 
         # move only certain files
+        # each batch size produces a header, a main object and a "_metadata" object;
+        # the latter holds the AOT-compiled constant buffers and must be linked too
         header_files = []
         object_files = []
         for path in os.listdir(aot_dir):
             if re.match(r"^.*_bs\d+\.h$", path):
                 header_files.append(path)
-            elif re.match(r"^.*_bs\d+\.o$", path):
+            elif re.match(r"^.*_bs\d+(_metadata)?\.o$", path):
                 object_files.append(path)
             else:
                 continue
@@ -147,8 +149,8 @@ def compile_model(
     n_batch_sizes = len(config["compilation"]["batch_sizes"])
     if len(header_files) != n_batch_sizes:
         raise ValueError(f"expected {n_batch_sizes} header files, got {len(header_files)}")
-    if len(object_files) != n_batch_sizes:
-        raise ValueError(f"expected {n_batch_sizes} object files, got {len(object_files)}")
+    if len(object_files) != 2 * n_batch_sizes:
+        raise ValueError(f"expected {2 * n_batch_sizes} object files, got {len(object_files)}")
 
     return header_files, object_files
 
